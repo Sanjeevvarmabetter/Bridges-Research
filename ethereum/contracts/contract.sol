@@ -18,7 +18,7 @@ contract EVMBridge {
         _;
 
     }
-
+    //this is for locking the asserts
     function lockAsserts(uint256 amount,bytes32 targetChainTxhash) external {
         require(amount > 0,"Amount must be greater than zero");
         require(!processedProofs[targetChainTxhash],"Proof must be greater than zero");
@@ -29,13 +29,14 @@ contract EVMBridge {
 
     }
 
+    //this is for unlocking the asserts
     function unlockAssert(address receiver,uint256 amount,bytes memory proof) external onlyOwner() {
             require(verifyProof(proof),"Invalid Proof");
 
             emit AssertUnlocked(receiver, amount);
     }
 
-    function verifyProof(bytes memory proof) internal pure returns (bool) {
+    function verifyProof(bytes memory  proof) internal pure returns (bool) {
         // light client verification
 
         return true;
