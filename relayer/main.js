@@ -1,6 +1,7 @@
 const { ethers } = require("ethers");
 const { connect, KeyPair, keyStores, utils } = require("near-api-js");
 
+// Hardcoded Configuration Values
 const POLYGON_AMOY_RPC_URL = "https://rpc-amoy.polygon.technology";
 const NEAR_TESTNET_RPC_URL = "https://rpc.testnet.near.org";
 const ETH_PRIVATE_KEY = process.env.ETH_PRIVATE_KEY;
@@ -12,10 +13,8 @@ const NEAR_ACCOUNT_ID = "sanjeevvarma.testnet";
 // Polygon Amoy Provider
 const provider = new ethers.providers.JsonRpcProvider(POLYGON_AMOY_RPC_URL);
 
-// ABI for EVMBridge Contract
 const EVMBridgeABI = require("./abis/EVMBridgeABI.json");
 
-// console.log(EVMBridgeABI);
 // Connect to NEAR Testnet
 async function initNearConnection() {
     const keyStore = new keyStores.InMemoryKeyStore();
@@ -40,30 +39,35 @@ async function listenForEvents() {
     console.log("Listening for AssertLocked events...");
 
     evmBridgeContract.on("AssertLocked", async (sender, amount, targetChainTxHash) => {
-        console.log(`Locked ${amount} tokens for ${sender} with txHash: ${targetChainTxHash}`);
-
-        // Convert the proof to a string
-        const proof = targetChainTxHash.toString();
-
-        // Mint tokens on NEAR
-        const near = await initNearConnection();
-        const account = await near.account(NEAR_ACCOUNT_ID);
+        console.log(`🔹 Locked ${amount} tokens for ${sender} with txHash: ${targetChainTxHash}`);
 
         try {
+            // Convert the amount to NEAR format (e.g., 1 ETH = 1 NEAR)
+            const nearAmount = utils.format.parseNearAmount(amount.toString());
+
+            if (!nearAmount) {
+                throw new Error("Invalid amount conversion to NEAR.");
+            }
+
+            // Initialize NEAR connection
+            const near = await initNearConnection();
+            const account = await near.account(NEAR_ACCOUNT_ID);
+
+            // Call the mint_asset function on the NEAR bridge contract
             await account.functionCall({
                 contractId: NEARBRIDGE_CONTRACT_ID,
                 methodName: "mint_asset",
                 args: {
-                    receiver: NEAR_ACCOUNT_ID, // 
+                    receiver: NEAR_ACCOUNT_ID.toLowerCase(), // Replace with the actual NEAR receiver account
                     amount: utils.format.parseNearAmount(amount.toString()), // Convert to NEAR Token
-                    proof: proof,
+                    proof: targetChainTxHash.toString(), // Use the transaction hash as proof
                 },
                 gas: "30000000000000", 
             });
 
-            console.log(`Minted ${amount} tokens on NEAR for proof: ${proof}`);
+            console.log(`✅ Minted ${amount} tokens on NEAR!`);
         } catch (error) {
-            console.error("Failed to mint tokens on NEAR:", error);
+            console.error("❌ Error minting on NEAR:", error);
         }
     });
 }
