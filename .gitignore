@@ -1,0 +1,83 @@
+# =========================
+# Node.js Specific Files
+# =========================
+# Dependency directories
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Build artifacts
+dist/
+build/
+out/
+coverage/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# IDE-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# =========================
+# Blockchain-Specific Files
+# =========================
+# Compiled Solidity contracts
+artifacts/
+cache/
+contracts/**/*.json
+
+# Hardhat or Truffle build artifacts
+build-info/
+hardhat.config.js.backup
+
+# Near SDK build artifacts
+neardev/
+target/
+
+# =========================
+# Sensitive Files
+# =========================
+# Private keys or secrets
+*.pem
+*.key
+privateKey.json
+mnemonic.txt
+keystore/
+
+# =========================
+# Optional: Exclude Large Files
+# =========================
+# Large files or datasets
+*.zip
+*.rar
+*.tar.gz
+
+# =========================
+# Optional: Exclude Temporary Files
+# =========================
+# Temporary files created by editors
+*~
+.*.swp
+.*.swo
+
+# =========================
+# Optional: Exclude CI/CD Artifacts
+# =========================
+# GitHub Actions or other CI/CD logs
+.github/workflows/*.log
