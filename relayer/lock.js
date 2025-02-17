@@ -14,9 +14,11 @@ const provider = new ethers.providers.JsonRpcProvider(POLYGON_AMOY_RPC_URL);
 const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 
 
-/// abi import
+// /// abi import
 
 const EVMBridgeABI = require("./abis/EVMBridgeABI.json");
+
+
 
 
 
@@ -27,20 +29,18 @@ const evmBridgeContract = new ethers.Contract(
     wallet
 );
 
-// Function to lock tokens
 async function lockTokens() {
     try {
-        // Amount of tokens to lock (e.g., 1 ETH or equivalent)
-        const amount = ethers.utils.parseEther("0.2");
+        const amount = ethers.utils.parseEther("0.0000002");
 
         const targetChainTxhash = ethers.utils.formatBytes32String(`unique-tx-hash-${Date.now()}`);
 
         const feeData = await provider.getFeeData();
 
         const tx = await evmBridgeContract.lockAsserts(amount, targetChainTxhash, {
-            maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"), // 30 Gwei
-            maxFeePerGas: ethers.utils.parseUnits("50", "gwei"),         // 50 Gwei
-            gasLimit: 300000, // Adjust gas limit as needed
+            maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"),
+            maxFeePerGas: ethers.utils.parseUnits("50", "gwei"),         
+            gasLimit: 300000, 
         });
 
         console.log("Transaction hash:", tx.hash);
