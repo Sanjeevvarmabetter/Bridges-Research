@@ -18,3 +18,6 @@ main()
 
   // near-light client
   // 0xb8354a709D30C7df69Cf80037A2AAfb9960e54a0
+
+
+     /// oracle based implementation : 0xa32D7B9aCf0624a9BE14036A4cdA454d296add7a
