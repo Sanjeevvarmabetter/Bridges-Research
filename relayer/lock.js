@@ -6,7 +6,6 @@ const POLYGON_AMOY_RPC_URL = "https://rpc-amoy.polygon.technology";
 // EVMBridge Contract Address
 const EVMBRIDGE_CONTRACT_ADDRESS = "0x5af61f732fe1C56fFe27481c0092F068F82a13D3";
 
-// Ethereum Wallet Private Key (Replace with your private key)
 const PRIVATE_KEY = process.env.ETH_PRIVATE_KEY;
 
 // Provider and Wallet Setup
@@ -31,7 +30,7 @@ const evmBridgeContract = new ethers.Contract(
 
 async function lockTokens() {
     try {
-        const amount = ethers.utils.parseEther("0.0000002");
+        const amount = ethers.utils.parseEther("0.000002");
 
         const targetChainTxhash = ethers.utils.formatBytes32String(`unique-tx-hash-${Date.now()}`);
 
